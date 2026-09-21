@@ -1,0 +1,214 @@
+﻿<Window x:Class="LissajousLab.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:LissajousLab.ViewModels"
+        mc:Ignorable="d"
+        Title="Лабораторна №1 — Фігури Ліссажу"
+        Width="1000"
+        Height="760"
+        MinWidth="900"
+        MinHeight="700"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="15">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        
+        <ScrollViewer Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto">
+
+            <StackPanel>
+
+                <TextBlock Text="Фігури Ліссажу"
+                           FontSize="25"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+
+                <TextBlock
+                    Text="x(t) = Ax·sin(2πfx·t + φx)"
+                    Margin="0,0,0,3"/>
+
+                <TextBlock
+                    Text="y(t) = Ay·sin(2πfy·t + φy)"
+                    Margin="0,0,0,20"/>
+
+                
+                <TextBlock Text="Амплітуда Ax (> 0):"/>
+
+                <TextBox Text="{Binding AmplitudeX,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,12"/>
+
+                
+                <TextBlock Text="Амплітуда Ay (> 0):"/>
+
+                <TextBox Text="{Binding AmplitudeY,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,12"/>
+
+                
+                <TextBlock Text="Частота fx, Гц (> 0):"/>
+
+                <TextBox Text="{Binding FrequencyX,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,12"/>
+
+               
+                <TextBlock Text="Частота fy, Гц (> 0):"/>
+
+                <TextBox Text="{Binding FrequencyY,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,12"/>
+
+                
+                <TextBlock Text="Фаза φx, градуси:"/>
+
+                <TextBox Text="{Binding PhaseX,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,12"/>
+
+                
+                <TextBlock Text="Фаза φy, градуси:"/>
+
+                <TextBox Text="{Binding PhaseY,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,5"/>
+
+                <Slider Minimum="-180"
+                        Maximum="180"
+                        TickFrequency="15"
+                        IsSnapToTickEnabled="False"
+                        Value="{Binding PhaseYSlider,
+                                UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0,0,0,3"/>
+
+                <Grid Margin="0,0,0,12">
+                    <TextBlock Text="-180°"
+                               HorizontalAlignment="Left"/>
+
+                    <TextBlock Text="0°"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="180°"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                
+                <TextBlock Text="Крок часу Δt, с (> 0):"/>
+
+                <TextBox Text="{Binding TimeStep,
+                                UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,4,0,15"/>
+
+                <Button Content="Побудувати"
+                        Command="{Binding BuildCommand}"
+                        Height="38"
+                        FontWeight="Bold"
+                        Margin="0,0,0,20"/>
+
+                <TextBlock Text="Типові співвідношення частот:"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,8"/>
+
+                <UniformGrid Columns="2"
+                             Rows="2">
+
+                    <Button Content="1 : 1"
+                            Command="{Binding SetPresetCommand}"
+                            CommandParameter="1:1"
+                            Margin="2"
+                            Height="32"/>
+
+                    <Button Content="1 : 2"
+                            Command="{Binding SetPresetCommand}"
+                            CommandParameter="1:2"
+                            Margin="2"
+                            Height="32"/>
+
+                    <Button Content="2 : 3"
+                            Command="{Binding SetPresetCommand}"
+                            CommandParameter="2:3"
+                            Margin="2"
+                            Height="32"/>
+
+                    <Button Content="3 : 4"
+                            Command="{Binding SetPresetCommand}"
+                            CommandParameter="3:4"
+                            Margin="2"
+                            Height="32"/>
+
+                </UniformGrid>
+
+                <Border Margin="0,20,0,0"
+                        Padding="10"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="4">
+
+                    <TextBlock Text="{Binding Message}"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+        
+        <Border Grid.Column="2"
+                BorderBrush="Gray"
+                BorderThickness="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <Canvas Width="600"
+                    Height="600"
+                    Background="White">
+
+                
+                <Line X1="0"
+                      Y1="300"
+                      X2="600"
+                      Y2="300"
+                      Stroke="LightGray"
+                      StrokeThickness="1"/>
+
+                
+                <Line X1="300"
+                      Y1="0"
+                      X2="300"
+                      Y2="600"
+                      Stroke="LightGray"
+                      StrokeThickness="1"/>
+
+                <TextBlock Text="X"
+                           Canvas.Left="575"
+                           Canvas.Top="305"
+                           Foreground="Gray"/>
+
+                <TextBlock Text="Y"
+                           Canvas.Left="305"
+                           Canvas.Top="5"
+                           Foreground="Gray"/>
+
+                <Polyline Points="{Binding GraphPoints}"
+                          Stroke="DarkBlue"
+                          StrokeThickness="2"/>
+
+            </Canvas>
+
+        </Border>
+
+    </Grid>
+
+</Window>
